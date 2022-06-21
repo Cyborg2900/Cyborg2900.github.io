@@ -55,6 +55,10 @@ function make_Grid(n){
     //         container.removeChild(container.childNodes[0]); 
     //     }
     // }
+
+    if(container.hasChildNodes()){   // removing pre exiting grid from the page
+        container.innerHTML = "";
+    }
     let s='';
     console.log("inside make grid");
     for(let i=0;i<n;i++){
@@ -62,7 +66,7 @@ function make_Grid(n){
         line_obj.setAttribute("class","rows");
         for(let j=0;j<n;j++){            
             s=i.toString()+j.toString();
-            console.log("cell maker fired for :"+ s);
+           // console.log("cell maker fired for :"+ s);
             let cell=document.createElement("div");
             cell.setAttribute("class","cell");
             cell.setAttribute("id",s);
@@ -107,13 +111,18 @@ document.querySelector("#grid-container").addEventListener('click',(e) =>{
     console.log(e);
     if(e.target.hasChildNodes())
         return; 
-    if(start==null || end!=null){
+    if(start==null){
     start=e.target;
     start.style.backgroundColor='#00ADB5';
     }
-    else if(end==null || start!=null){
+    else if(end==null){
     end=e.target;
-    end.style.backgroundColor='lightgreen';
+    end.style.backgroundColor='#3EC70B';
+    }
+    else if(start!=null && e.target!=end){
+        start.style.backgroundColor='';
+        start=e.target;
+        start.style.backgroundColor='#3AB0FF';
     }
 });
 
@@ -128,6 +137,17 @@ function start_journey(){
     for(let i=0;i<num;i++){
         grd_i[i]=new Array(num);
     }
+    let srt=new Array(2);
+
 
     
+}
+
+
+
+function clear_points(){
+    start.style.backgroundColor="";
+    start=null;
+    end.style.backgroundColor="";
+    end=null;
 }
