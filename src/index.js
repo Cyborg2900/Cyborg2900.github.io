@@ -58,6 +58,8 @@ function make_Grid(n){
 
     if(container.hasChildNodes()){   // removing pre exiting grid from the page
         container.innerHTML = "";
+        start=null;
+        end=null;
     }
     let s='';
     console.log("inside make grid");
