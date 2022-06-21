@@ -105,15 +105,16 @@ let end=null;
 
 document.querySelector("#grid-container").addEventListener('click',(e) =>{
     console.log(e);
-    if(start==null){
+    if(e.target.hasChildNodes())
+        return; 
+    if(start==null || end!=null){
     start=e.target;
-    start.style.backgroundColor='lightgreen';
+    start.style.backgroundColor='#00ADB5';
     }
-    else{
+    else if(end==null || start!=null){
     end=e.target;
     end.style.backgroundColor='lightgreen';
     }
-
 });
 
 
