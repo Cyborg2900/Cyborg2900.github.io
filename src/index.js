@@ -111,27 +111,30 @@ function make_Grid(n){
 console.log(document.getElementById("grid-container"));
 let start=null;
 let end=null;
+let chance=true;
 
 
 document.querySelector("#grid-container").addEventListener('click',(e) =>{
     console.log(e);
     if(e.target.hasChildNodes())
         return; 
-    if(start==null){
+    if(start==null || chance==true){
+        if(start!=null)
+        start.style.backgroundColor='';
     start=e.target;
     start.style.backgroundColor='#00ADB5';
     // start.style.width='11px';
     // start.style.height='11px';
     // start.style.margin='0px';
+    chance =false;
     }
-    else if(end==null){
+    else if(end==null || chance ==false){
+        if(end!=null)
+            end.style.backgroundColor='';
     end=e.target;
     end.style.backgroundColor='#3EC70B';
-    }
-    else if(start!=null && e.target!=end){
-        start.style.backgroundColor='';
-        start=e.target;
-        start.style.backgroundColor='#3AB0FF';
+
+    chance=true;
     }
 });
 

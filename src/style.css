@@ -37,9 +37,9 @@ body{
     align-items: center;
     height: 15px;
     width: 15px;
-    margin: 1px;
+    /* margin: 1px; */
     /* background-color: rgb(65, 49, 213); */
-    border: 1px dotted white;
+    border: 1px solid rgba(184, 130, 238, 0.621);
     border-radius: 2px;
 }
 
