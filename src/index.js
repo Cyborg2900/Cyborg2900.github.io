@@ -63,6 +63,10 @@ function make_Grid(n){
     }
     let s='';
     console.log("inside make grid");
+    if(n>100){
+        alert("Please give number smaller than 100");
+        return ;
+    }
     for(let i=0;i<n;i++){
         const line_obj=document.createElement("div");
         line_obj.setAttribute("class","rows");
@@ -116,6 +120,9 @@ document.querySelector("#grid-container").addEventListener('click',(e) =>{
     if(start==null){
     start=e.target;
     start.style.backgroundColor='#00ADB5';
+    // start.style.width='11px';
+    // start.style.height='11px';
+    // start.style.margin='0px';
     }
     else if(end==null){
     end=e.target;
