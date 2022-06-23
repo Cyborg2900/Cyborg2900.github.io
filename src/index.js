@@ -115,7 +115,7 @@ let chance=true;
 
 
 document.querySelector("#grid-container").addEventListener('click',(e) =>{
-    console.log(e);
+    // console.log(e);
     if(e.target.hasChildNodes())
         return; 
     if(start==null || chance==true){
@@ -140,20 +140,98 @@ document.querySelector("#grid-container").addEventListener('click',(e) =>{
 
 
 function start_journey(){
-    console.log("starting point");
-    console.log(start);
-    console.log("ending point");
-    console.log(end);
+    // console.log("starting point");
+    // console.log(start);
+    // console.log("ending point");
+    // console.log(end);
+
+    if(start==null || end==null)
+    {
+        alert("Please specify the starting end ending points");
+        return ;
+    }
+
+
+    let start_index=new Array(2);
+    let start_id=start.id;
+    start_index[0]=Number(start_id[0]);
+    start_index[1]=Number(start_id[1]);
+
+
+    let end_index=new Array(2);
+    let end_id=end.id;
+    end_index[0]=Number(end_id[0]);
+    end_index[1]=Number(end_id[1]);
+
+    console.log(start_index);
+    console.log(end_index);
 
     let grd_i=new Array(num);
     for(let i=0;i<num;i++){
         grd_i[i]=new Array(num);
     }
-    let srt=new Array(2);
+
+    let q=new Array();
+
+    q.push(start_index);
+
+    let flg =false;         // to check weather we found the cell or not 
+
+    while(q.length>0){
+        let cur=q.shift();
+        console.log(cur);
+        if(grd_i[cur[0]][cur[1]]==1)
+            continue;
+
+        visited(cur[0],cur[1],grd_i);
+
+
+        if(cur[0]==end_index[0] && cur[1]==end_index[1]){
+            let id=cur[0].toString()+cur[1].toString();
+            start.style.backgroundColor='yellow';
+            end.style.backgroundColor='yellow';
+            flg=true;
+            return ;
+        }
+
+        if(cur[1]+1<num){                   // add the right cell to queue
+            q.push([cur[0],cur[1]+1]);
+        }
+        if(cur[0]+1<num){                   // adding the bottom cell to queue
+            q.push([cur[0]+1,cur[1]]);
+        }
+        if(cur[1]-1>=0){                    // left cell
+            q.push([cur[0],cur[1]-1]);
+        }
+        if(cur[0]-1>=0){                    // top cell
+            q.push([cur[0]-1,cur[1]]);
+        }
+        
+        
+    }
+
+    if(!flg){
+        alert("could not reach the target cell");
+    }
+
+
 
 
     
 }
+
+// visited function 
+
+function visited(i,j,arr){
+    
+        console.log("visiting "+i+" "+j);
+        let id=i.toString()+j.toString();
+        document.getElementById(id).style.backgroundColor='blue';
+        arr[i][j]=1;
+
+    return ;
+}
+
 
 
 
