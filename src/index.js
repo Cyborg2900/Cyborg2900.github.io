@@ -40,12 +40,27 @@
 let num=0;
 
 const container = document.getElementById("grid-container");
+container.innerHTML=null;
+
+let blocker_flag=false;
+let grd_i;
+    
 
 function grid_maker(){
     num=document.getElementById("num").value;
     document.getElementById("num").value=null;
     console.log("grid maker fired");
     make_Grid(num);
+}
+
+
+function clear_grid(){
+    if(num!=0 && num!=undefined)
+        make_Grid(num);
+    else
+        container.innerHTML=""
+
+    return;
 }
 
 
@@ -62,6 +77,17 @@ function make_Grid(n){
         end=null;
     }
     let s='';
+
+
+
+    grd_i=new Array(n);
+    for(let i=0;i<n;i++){
+        grd_i[i]=new Array(n);
+    }
+
+
+
+
     console.log("inside make grid");
     if(n>100){
         alert("Please give number smaller than 100");
@@ -71,7 +97,7 @@ function make_Grid(n){
         const line_obj=document.createElement("div");
         line_obj.setAttribute("class","rows");
         for(let j=0;j<n;j++){            
-            s=i.toString()+j.toString();
+            s=i.toString()+","+j.toString();
            // console.log("cell maker fired for :"+ s);
             let cell=document.createElement("div");
             cell.setAttribute("class","cell");
@@ -118,6 +144,22 @@ document.querySelector("#grid-container").addEventListener('click',(e) =>{
     // console.log(e);
     if(e.target.hasChildNodes())
         return; 
+    
+    if(blocker_flag){
+        let block=e.target;
+        let index=block.id.split(",");
+        if(grd_i[index[0]][index[1]]!=1){
+            grd_i[index[0]][index[1]]=1;
+            block.style.backgroundColor='white';
+        }
+        else{
+            grd_i[index[0]][index[1]]=0;
+            block.style.backgroundColor='';
+        }
+        return ;
+    }
+
+    console.log(e.target.id);
     if(start==null || chance==true){
         if(start!=null)
         start.style.backgroundColor='';
@@ -154,22 +196,20 @@ function start_journey(){
 
     let start_index=new Array(2);
     let start_id=start.id;
-    start_index[0]=Number(start_id[0]);
-    start_index[1]=Number(start_id[1]);
+    start_index=start_id.split(",");
+    start_index[0]=Number(start_index[0]);
+    start_index[1]=Number(start_index[1]);
 
 
     let end_index=new Array(2);
     let end_id=end.id;
-    end_index[0]=Number(end_id[0]);
-    end_index[1]=Number(end_id[1]);
+    end_index=end_id.split(",");
+    end_index[0]=Number(end_index[0]);
+    end_index[1]=Number(end_index[1]);
 
-    console.log(start_index);
-    console.log(end_index);
+    console.log(start_index + ": starting index");
+    console.log(end_index+ " : ending index");
 
-    let grd_i=new Array(num);
-    for(let i=0;i<num;i++){
-        grd_i[i]=new Array(num);
-    }
 
     let q=new Array();
 
@@ -177,22 +217,26 @@ function start_journey(){
 
     let flg =false;         // to check weather we found the cell or not 
 
+    let counter_for_animation_delay=0;
     while(q.length>0){
         let cur=q.shift();
         console.log(cur);
         if(grd_i[cur[0]][cur[1]]==1)
             continue;
 
-        visited(cur[0],cur[1],grd_i);
+        
 
 
         if(cur[0]==end_index[0] && cur[1]==end_index[1]){
             let id=cur[0].toString()+cur[1].toString();
-            start.style.backgroundColor='yellow';
-            end.style.backgroundColor='yellow';
+            setTimeout(()=>{
+                start.style.backgroundColor='yellow';
+                end.style.backgroundColor='yellow';
+            },50*counter_for_animation_delay+10);
             flg=true;
             return ;
         }
+        visited(cur[0],cur[1],grd_i,counter_for_animation_delay++);
 
         if(cur[1]+1<num){                   // add the right cell to queue
             q.push([cur[0],cur[1]+1]);
@@ -222,11 +266,17 @@ function start_journey(){
 
 // visited function 
 
-function visited(i,j,arr){
+function visited(i,j,arr,animation_delay){
     
         console.log("visiting "+i+" "+j);
-        let id=i.toString()+j.toString();
-        document.getElementById(id).style.backgroundColor='blue';
+        let id=i.toString()+","+j.toString();
+        if(id==start.id){
+            arr[i][j]=1;
+            return;
+        }
+        setTimeout(()=>{
+            document.getElementById(id).style.backgroundColor='blue';
+        },50*animation_delay);
         arr[i][j]=1;
 
     return ;
@@ -240,4 +290,24 @@ function clear_points(){
     start=null;
     end.style.backgroundColor="";
     end=null;
+}
+
+
+
+function make_blockers(){
+    // if(container.innerHTML==null){
+    //     alert("first make grid");
+    //     return ;
+    // }
+    const make_blockers_obj=document.getElementById("make_blocks_button");
+    if(make_blockers_obj.innerHTML=="Add Blocker"){
+        blocker_flag=true;
+        make_blockers_obj.innerHTML="Stop Making blocks";
+    }
+    else{
+        blocker_flag=false;
+        make_blockers_obj.innerHTML="Add Blocker";
+
+    }
+    return;
 }
